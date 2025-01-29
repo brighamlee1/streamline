@@ -1,0 +1,40 @@
+{
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "prisma generate && nuxt build",
+        "dev": "nuxt dev --port 3005",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "prisma generate",
+        "format": "prettier --list-different --write \"**/*.{js,jsx,ts,tsx,vue,json,md,mts}\""
+    },
+    "dependencies": {
+        "@heroicons/vue": "^2.1.1",
+        "@nuxt/ui": "^2.12.0",
+        "@nuxtjs/color-mode": "^3.3.2",
+        "@prisma/client": "^5.9.1",
+        "dayjs": "1.11.10",
+        "nuxt": "^3.10.1",
+        "v-calendar": "next",
+        "vue": "^3.4.15",
+        "vue-flatpickr-component": "^11",
+        "vue-router": "^4.2.5"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/jsonwebtoken": "^9.0.5",
+        "@vite-pwa/nuxt": "^0.6.0",
+        "autoprefixer": "^10.4.17",
+        "bcrypt": "^5.1.1",
+        "firebase": "^10.11.0",
+        "firebase-admin": "^12.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "postcss": "8.4.33",
+        "prettier": "^3.2.4",
+        "prettier-plugin-tailwindcss": "^0.5.11",
+        "prisma": "^5.9.1",
+        "tailwindcss": "^3.4.1"
+    }
+}
