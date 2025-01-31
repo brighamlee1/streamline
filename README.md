@@ -1,75 +1,21 @@
-# Nuxt 3 Minimal Starter
+# Streamline - Day Order Management System
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern, efficient day order management system built with Nuxt 3, Vue.js, and Firebase. This application helps streamline the process of managing and tracking day orders with real-time notifications and administrative capabilities.
 
-## Setup
+## Features
 
-Make sure to install the dependencies:
+- 📱 PWA Support for mobile-first experience
+- 🔔 Real-time notifications using Firebase
+- 👥 User authentication and authorization
+- 📊 Reporting and analytics dashboard
+- 🎨 Dark/Light mode support
+- 🔒 Secure data management with PostgreSQL and utilize Prisma ORM
 
-```bash
-# npm
-npm install
+## Tech Stack
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- **Frontend**: Vue.js 3, Nuxt 3, TailwindCSS, Nuxt UI
+- **Backend**: Node.js with Nuxt server routes
+- **Database**: PostgreSQL - Neon.tech
+- **Authentication**: JWT
+- **Notifications**: Firebase Cloud Messaging
+- **Styling**: TailwindCSS
