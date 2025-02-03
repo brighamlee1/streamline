@@ -93,11 +93,12 @@ async function setToken() {
     } catch (error) {
         alert('error getting token from firebase' + error);
     }
+
     try {
         // send token to server, save in user schema
         await $fetch('/api/users/token', {
             method: 'POST',
-            body: { token, userId: currentUser.value?.id, deviceId: getDeviceIdFromLocalStorage()?.value }
+            body: { token: messagingToken.value, userId: currentUser.value?.id, deviceId: getDeviceIdFromLocalStorage()?.value }
         });
     } catch (error) {
         alert('error creating token in db' + error);
