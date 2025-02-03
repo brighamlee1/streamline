@@ -26,7 +26,7 @@ const toast = useToast();
 onMounted(async () => {
     if ("serviceWorker" in navigator) {
         try {
-            await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+            console.log(navigator.serviceWorker);
         } catch (error) {
             alert('service worker registration failed: ' + error);
         }
