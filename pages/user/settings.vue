@@ -51,13 +51,17 @@ function removeDeviceIdFromLocalStorage() {
 function requestPermission() {
     if (!window.Notification) return;
     console.log('requesting permission');
-    window.Notification.requestPermission(async (value) => {
-        if (value === 'granted') {
-            setToken();
-        } else {
-            toast.add({ title: 'Notifications are currently disabled. Change your browser settings to allow notifications and try again.', color: 'red' });
-        }
-    })
+    if (window.Notification.permission === 'granted') {
+        setToken();
+    } else {
+        window.Notification.requestPermission((value) => {
+            if (value === 'granted') {
+                setToken();
+            } else {
+                toast.add({ title: 'Notifications are currently disabled. Change your browser settings to allow notifications and try again.', color: 'red' });
+            }
+        });
+    }
 }
 
 async function setToken() {
