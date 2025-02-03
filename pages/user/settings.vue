@@ -24,7 +24,18 @@ const { user: currentUser } = useUser();
 const toast = useToast();
 
 onMounted(async () => {
-    await requestPermission();
+    if ("serviceWorker" in navigator) {
+        try {
+            await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+        } catch (error) {
+            alert('service worker registration failed: ' + error);
+        }
+    }
+
+    if (!("PushManager" in window)) {
+        alert('Push notifications are not supported in this browser.');
+        return;
+    }
 });
 
 const notificationPermissionGranted = computed(() => window?.Notification?.permission === 'granted');
