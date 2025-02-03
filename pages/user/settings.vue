@@ -23,6 +23,10 @@ const messagingToken = ref('');
 const { user: currentUser } = useUser();
 const toast = useToast();
 
+onMounted(() => {
+    requestPermission();
+});
+
 const notificationPermissionGranted = computed(() => window?.Notification?.permission === 'granted');
 
 function getDeviceIdFromLocalStorage() {
