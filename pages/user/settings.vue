@@ -81,16 +81,28 @@ async function requestPermission() {
 
 async function setToken() {
     const { $messaging } = useNuxtApp();
-    const token = await getToken($messaging, {
-        vapidKey: "BFVxvgDxvbJNonrThKbyRSNTzw2z33q41LtoPRQrg1bsB4Zg3hdo0PdNf0V_9PwDkK54TPIrAps6THN4rcSozFo"
-    });
+    alert('setting token');
+    try {
+        const token = await getToken($messaging, {
+            vapidKey: "BFVxvgDxvbJNonrThKbyRSNTzw2z33q41LtoPRQrg1bsB4Zg3hdo0PdNf0V_9PwDkK54TPIrAps6THN4rcSozFo"
+        });
 
-    messagingToken.value = token;
-    // send token to server, save in user schema
-    await $fetch('/api/users/token', {
-        method: 'POST',
-        body: { token, userId: currentUser.value?.id, deviceId: getDeviceIdFromLocalStorage()?.value }
-    });
+        alert('token' + token);
+
+        messagingToken.value = token;
+    } catch (error) {
+        alert('error getting token from firebase' + error);
+    }
+    try {
+        // send token to server, save in user schema
+        await $fetch('/api/users/token', {
+            method: 'POST',
+            body: { token, userId: currentUser.value?.id, deviceId: getDeviceIdFromLocalStorage()?.value }
+        });
+    } catch (error) {
+        alert('error creating token in db' + error);
+    }
+    
 }
 
 function checkNotificationPermissionAndUpdateToken() {
