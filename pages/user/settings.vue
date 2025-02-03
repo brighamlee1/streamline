@@ -23,8 +23,8 @@ const messagingToken = ref('');
 const { user: currentUser } = useUser();
 const toast = useToast();
 
-onMounted(() => {
-    requestPermission();
+onMounted(async () => {
+    await requestPermission();
 });
 
 const notificationPermissionGranted = computed(() => window?.Notification?.permission === 'granted');
@@ -52,15 +52,15 @@ function removeDeviceIdFromLocalStorage() {
     localStorage.removeItem('deviceId');
 }
 
-function requestPermission() {
+async function requestPermission() {
     if (!window.Notification) return;
     console.log('requesting permission');
     if (window.Notification.permission === 'granted') {
-        setToken();
+        await setToken();
     } else {
-        window.Notification.requestPermission((value) => {
+        window.Notification.requestPermission(async (value) => {
             if (value === 'granted') {
-                setToken();
+                await setToken();
             } else {
                 toast.add({ title: 'Notifications are currently disabled. Change your browser settings to allow notifications and try again.', color: 'red' });
             }
@@ -71,7 +71,7 @@ function requestPermission() {
 async function setToken() {
     const { $messaging } = useNuxtApp();
     const token = await getToken($messaging, {
-        vapidKey: "BKS4L2cn18GpuALWuy5ZHMeG4Rnrr6HD2RPpdxbgmZJdZ_k__2tOPkFh6AkuC3p8n5f66neV4j7nWWPekNXxcwk"
+        vapidKey: "BFVxvgDxvbJNonrThKbyRSNTzw2z33q41LtoPRQrg1bsB4Zg3hdo0PdNf0V_9PwDkK54TPIrAps6THN4rcSozFo"
     });
 
     messagingToken.value = token;
