@@ -19,9 +19,12 @@ import { H3Event } from 'h3';
 async function getAllDayOrders(event: H3Event) {
     const query = getQuery(event);
     let active;
+    let complete;
 
     if (query.active === 'true') active = true;
     if (query.active === 'false') active = false;
+    if (query.complete === 'true') complete = true;
+    if (query.complete === 'false') complete = false;
 
     // get all day orders
     const dayOrders = await prisma.dayOrder.findMany({
@@ -29,9 +32,12 @@ async function getAllDayOrders(event: H3Event) {
             ...(query.fitter && { fitterId: Number(query.fitter) }),
             ...(query.active && { job: { active: active } }),
             ...(query.job && { jobId: Number(query.job) }),
-            ...(query.status && { status: String(query.status) })
+            ...(query.status && { status: String(query.status) }),
+            ...(query.complete && complete && { status: { in: ['Delivered', 'Pricing Completed (If applicable)'] } }),
+            ...(query.complete && !complete && { status: { notIn: ['Delivered', 'Pricing Completed (If applicable)'] } })
         },
-        include: { items: true, job: true }
+        include: { items: true, job: true },
+        orderBy: { deliveryDateRequested: 'desc' }
     });
     return dayOrders;
 }

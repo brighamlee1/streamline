@@ -16,6 +16,8 @@
             </UVerticalNavigation>
         </div>
     </div>
+
+    <UButton @click="test">Test</UButton>
 </template>
 
 <script setup>
@@ -28,6 +30,16 @@ const links = computed(() => [
     { label: 'New Day Order', icon: 'i-heroicons-briefcase', to: currentUser.value?.group === 'Admin' ? '/admin/day-orders/create' : '/day-orders/create' },
     { label: 'My Day Orders', icon: 'i-heroicons-users', to: '/user/day-orders' }
 ]);
+
+const test = async () => {
+    const response = await fetch(`/api/test`, { 
+        method: 'POST',
+        'Content-Type': 'application/json',
+        body: JSON.stringify({
+            userId: 1
+        })
+    });
+};
 
 // onMounted(() => {
 //     requestPermission();
