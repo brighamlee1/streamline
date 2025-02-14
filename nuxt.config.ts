@@ -21,19 +21,6 @@ export default defineNuxtConfig({
   postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
   colorMode: { preference: 'dark', classSuffix: '' },
   ssr: false,
-  pwa: {
-    manifest: {
-      name: 'EFP Day Orders',
-      short_name: 'EFP',
-      start_url: '/',
-      scope: '/',
-      display: 'standalone',
-      display_override: ['standalone', 'fullscreen', 'minimal-ui', 'browser'],
-      background_color: '#000000',
-      theme_color: '#ffffff'
-      // more manifest settings
-    }
-  },
   runtimeConfig: {
     public: {
       firebaseConfig: {
