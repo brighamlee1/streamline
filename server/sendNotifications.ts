@@ -11,14 +11,6 @@ export default async function sendNotifications(payload: Payload[]) {
     const messaging = getMessaging(app);
 
     try {
-        // const res = await messaging.send({
-        //     notification: {
-        //         title: payload[0].title,
-        //         body: payload[0].body,
-        //     },
-        //     token: payload[0].token,
-        //     webpush: { fcmOptions: { link: payload[0].link } }
-        // })
         const res = await messaging.sendEach(payload.map((p) => {
             return {
                 notification: {

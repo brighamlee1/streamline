@@ -177,6 +177,17 @@
                 </template>
             </UTable>
 
+            <div class="mt-8 flex flex-col justify-between gap-2 sm:flex-row w-full">
+                <div class="flex flex-col gap-1 w-full">
+                    Fitter Notes
+                    <UTextarea v-if="dayOrder" v-model="dayOrder.notes" @blur="updateDayOrder('notes')" color="red" :ui="inputUi" />
+                    <div v-else class="space-y-2">
+                        <USkeleton class="h-3 w-full" />
+                        <USkeleton class="h-3 w-full" />
+                    </div>
+                </div>
+            </div>
+
             <div class="mt-8 flex flex-col justify-between gap-2 sm:flex-row">
                 <div class="flex flex-col gap-1">
                     Date Shipped

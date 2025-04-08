@@ -1,19 +1,21 @@
 <template>
     <div class="font-medium text-2xl mb-4">User Settings</div>
 
-    <UCard v-if="currentUser?.group === 'Admin'">
+    <UCard v-if="currentUser?.group === 'Admin'" class="mb-4">
         <div class="flex flex-col gap-2">
             <div class="text-xl mb-1">Notifications</div>
 
             <div v-if="notificationPermissionGranted">
-                <UAlert icon="i-heroicons-information-circle" color="green" variant="soft" title="Notifications are currently enabled." description="Notifications are currently enabled for this site. To disable them, please follow these steps: 1. Click the lock icon (or info icon) in the address bar 2. Find the 'Notifications' permission 3. Change it to 'Block' or 'Ask' (depending on your preference)." />
+                <UAlert icon="i-heroicons-information-circle" color="green" variant="solid" title="Notifications are currently enabled." description="Notifications are currently enabled for this site. To disable them, please follow these steps: 1. Click the lock icon (or info icon) in the address bar 2. Find the 'Notifications' permission 3. Change it to 'Block' or 'Ask' (depending on your preference)." />
             </div>
             <div v-else class="flex flex-col gap-2">
-                <UAlert icon="i-heroicons-information-circle" color="blue" variant="soft" title="Click below to receive notifications when a day order is created by a fitter." />
+                <UAlert icon="i-heroicons-information-circle" color="blue" variant="solid" title="Click below to receive notifications when a day order is created by a fitter." />
                 <UButton class="w-fit" size="sm" color="blue" @click="requestPermission">Receive Notifications</UButton>
             </div>
         </div>
     </UCard>
+
+    <UAlert v-if="isSavingToken" icon="i-heroicons-information-circle" color="yellow" variant="solid" title="Saving notification preferences..." description="Please do not refresh or leave this page." />
 </template>
 
 <script setup lang="ts">
@@ -23,12 +25,15 @@ const messagingToken = ref('');
 const { user: currentUser } = useUser();
 const toast = useToast();
 
+const isSavingToken = ref(false);
+
 onMounted(async () => {
     if ("serviceWorker" in navigator) {
         try {
             console.log(navigator.serviceWorker);
         } catch (error) {
-            alert('service worker registration failed: ' + error);
+            alert('service worker registration failed: contact help or refresh the page');
+            return;
         }
     }
 
@@ -48,7 +53,7 @@ function getDeviceIdFromLocalStorage() {
     deviceId = localStorage.getItem('deviceId');
 
     // Use the stored value if it exists, otherwise use the default
-    if (deviceId) deviceId = JSON.parse(deviceId)
+    if (deviceId) deviceId = JSON.parse(deviceId);
     
     // If the key doesn't exist in local storage, initialize it with the default value
     if (!deviceId) {
@@ -65,7 +70,6 @@ function removeDeviceIdFromLocalStorage() {
 
 async function requestPermission() {
     if (!window.Notification) return;
-    console.log('requesting permission');
     if (window.Notification.permission === 'granted') {
         await setToken();
     } else {
@@ -81,36 +85,38 @@ async function requestPermission() {
 
 async function setToken() {
     const { $messaging } = useNuxtApp();
-    alert('setting token');
     try {
+        isSavingToken.value = true;
         const token = await getToken($messaging, {
             vapidKey: "BFVxvgDxvbJNonrThKbyRSNTzw2z33q41LtoPRQrg1bsB4Zg3hdo0PdNf0V_9PwDkK54TPIrAps6THN4rcSozFo"
         });
 
-        alert('token' + token);
-
         messagingToken.value = token;
     } catch (error) {
-        alert('error getting token from firebase' + error);
+        isSavingToken.value = false;
+        alert('error getting token from firebase, contact for help or try again');
+        return;
     }
 
     try {
+        isSavingToken.value = true;
         // send token to server, save in user schema
         await $fetch('/api/users/token', {
             method: 'POST',
             body: { token: messagingToken.value, userId: currentUser.value?.id, deviceId: getDeviceIdFromLocalStorage()?.value }
         });
     } catch (error) {
-        alert('error creating token in db' + error);
+        isSavingToken.value = false;
+        alert('error creating token in database' + error);
+        return;
     }
-    
+
+    isSavingToken.value = false;
 }
 
 function checkNotificationPermissionAndUpdateToken() {
-    console.log('checkNotificationPermissionAndUpdateToken');
     window.Notification.requestPermission(async (value) => {
         if (value !== 'granted') {
-            console.log('permission denied');
             deleteTokenFromDatabase();
         }
     });

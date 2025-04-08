@@ -8,6 +8,10 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
         return navigateTo(`/login`);
     }
 
+    if (userCookie.value?.user && userCookie.value.user.forcePasswordChange && to.path !== '/force-pw-change') {
+        return navigateTo(`/force-pw-change`);
+    }
+
     // const { user } = useUser();
     // const toast = useToast();
 

@@ -43,6 +43,10 @@ async function update() {
         toast.add({ title: 'Passwords must match', color: 'red' });
         return;
     }
+    if (password.value.length < 8) {
+        toast.add({ title: 'Password must be at least 8 characters', color: 'red' });
+        return;
+    }
 
     try {
         isUpdating.value = true;

@@ -207,11 +207,24 @@ const actionItems = (row) => [
     ],
     [
         {
-            label: 'Day Orders',
+            label: 'Active Day Orders',
             icon: 'i-heroicons-clipboard-document-list',
             click: () => {
-                navigateTo(`/reporting/day-orders/${row.active ? 'active' : 'inactive'}`);
+                navigateTo(`/reporting/day-orders/active`);
                 const filters = useLocalStorage('day-order-filters');
+                filters.value.status = undefined;
+                filters.value.fitter = undefined;
+                filters.value.job = row.id;
+            }
+        },
+        {
+            label: 'Inactive Day Orders',
+            icon: 'i-heroicons-clipboard-document-list',
+            click: () => {
+                navigateTo(`/reporting/day-orders/inactive`);
+                const filters = useLocalStorage('day-order-filters');
+                filters.value.status = undefined;
+                filters.value.fitter = undefined;
                 filters.value.job = row.id;
             }
         }

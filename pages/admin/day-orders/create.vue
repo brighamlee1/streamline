@@ -1,5 +1,6 @@
 <template>
-    <div class="pb-8">
+    <div v-if="currentUser?.group !== 'Admin'" class="text-xl font-medium">You do not have permission to view this page.</div>
+    <div v-else class="pb-8">
         <div class="mx-auto flex max-w-[1600px] justify-end">
             <UButton class="mb-2" :variant="colorMode.preference === 'dark' ? 'soft' : 'outline'" @click="router.back()">Go Back</UButton>
         </div>
@@ -147,6 +148,7 @@ import 'flatpickr/dist/flatpickr.css';
 const colorMode = useColorMode();
 const toast = useToast();
 const router = useRouter();
+const { user: currentUser } = useUser();
 
 const defaultDayOrderItem = () => {
     return {

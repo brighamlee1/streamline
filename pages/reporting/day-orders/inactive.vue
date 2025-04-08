@@ -1,3 +1,9 @@
 <template>
-    <LazyReportingDayOrders :active="false" />
+    <div v-if="currentUser?.group !== 'Admin'" class="text-xl font-medium">You do not have permission to view this page.</div>
+
+    <LazyReportingDayOrders v-else :active="false" />
 </template>
+
+<script setup>
+const { user: currentUser } = useUser();
+</script>

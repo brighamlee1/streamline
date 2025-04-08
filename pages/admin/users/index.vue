@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div v-if="currentUser?.group !== 'Admin'" class="text-xl font-medium">You do not have permission to view this page.</div>
+
+    <div v-else>
         <div class="flex justify-between">
             <div class="mb-6 text-2xl font-bold">Users</div>
 
@@ -68,6 +70,8 @@ const toast = useToast();
 const isModalOpen = ref(false);
 const isSaving = ref(false);
 const isEditingUser = ref(false);
+
+const { user: currentUser } = useUser();
 
 const defaultFormValues = () => {
     return {
@@ -230,13 +234,6 @@ const actionItems = (row) => [
             label: 'Reset Password',
             icon: 'i-heroicons-bookmark-slash',
             click: () => resetPassword(row)
-        }
-    ],
-    [
-        {
-            label: 'Day Orders',
-            icon: 'i-heroicons-clipboard-document-list',
-            click: () => navigateTo(`/admin/users/${row.id}/day-orders`)
         }
     ]
 ];
