@@ -69,7 +69,7 @@ async function login() {
         if (response.user.forcePasswordChange) return await navigateTo('/force-pw-change');
         await navigateTo('/');
     } catch (error) {
-        toast.add({ title: 'Error logging in', color: 'red' })
+        toast.add({ title: 'Error logging in', color: 'red' });
     } finally {
         is_logging_in.value = false;
     }

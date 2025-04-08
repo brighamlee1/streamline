@@ -11,22 +11,22 @@ export default async function sendNotifications(payload: Payload[]) {
     const messaging = getMessaging(app);
 
     try {
-        const res = await messaging.send({
-            notification: {
-                title: payload[0].title,
-                body: payload[0].body
-            },
-            token: payload[0].token
-        })
-        // const res = await messaging.sendEach(payload.map((p) => {
-        //     return {
-        //         notification: {
-        //             title: p.title,
-        //             body: p.body
-        //         },
-        //         token: p.token
-        //     }
-        // }));
+        // const res = await messaging.send({
+        //     notification: {
+        //         title: payload[0].title,
+        //         body: payload[0].body
+        //     },
+        //     token: payload[0].token
+        // })
+        const res = await messaging.sendEach(payload.map((p) => {
+            return {
+                notification: {
+                    title: p.title,
+                    body: p.body
+                },
+                token: p.token
+            }
+        }));
 
         return res;
     } catch (error) {
