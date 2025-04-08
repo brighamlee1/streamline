@@ -5,8 +5,14 @@ import sendNotifications from "~/server/sendNotifications";
 export default defineEventHandler(async (event: H3Event) => {
     const body = await readBody(event);
 
+    event.waitUntil(sendNotificationsToAllSubscribers(body.userId));
+
+    return { status: 200, message: 'Notifications sent' };
+});
+
+const sendNotificationsToAllSubscribers = async (userId: number) => {
     const userTokens = await prisma.firebaseToken.findMany({
-        where: { userId: body.userId }
+        where: { userId: userId }
     });
 
     const payload = userTokens.map((t) => {
@@ -14,8 +20,5 @@ export default defineEventHandler(async (event: H3Event) => {
     });
 
     const res = await sendNotifications(payload);
-
-    console.log(res);
-
-    return { status: 200, message: 'Notifications sent' };
-});
+    console.log('background work done');
+}

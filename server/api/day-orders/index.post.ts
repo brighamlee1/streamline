@@ -15,6 +15,17 @@ interface CreateDayOrderBody {
     createdByFitter?: boolean;
 }
 
+const sendNotificationsToAllSubscribers = async (createdDayOrder: any) => {
+    const userTokens = await prisma.firebaseToken.findMany();
+        
+    const payload = userTokens.map((t) => {
+        return { title: `Day Order Created by ${createdDayOrder.fitter?.name}`, body: `Day Order created on ${createdDayOrder.job.name} Job #${createdDayOrder.job.number}`,token: t.token }
+    });
+    console.log('sending notifications', payload)
+    await sendNotifications(payload);
+    console.log('background work done');
+}
+
 async function createDayOrder(event: H3Event) {
     const body: CreateDayOrderBody = await readBody(event);
     let createdDayOrder: any;
@@ -26,15 +37,7 @@ async function createDayOrder(event: H3Event) {
     // Create new day order
     if (!createdDayOrder) {
         createdDayOrder = await prisma.dayOrder.create({ data: body, include: { fitter: { select: { name: true } }, job: { select: { name: true, number: true } } } });
-        if (createdDayOrder && createdByFitter) {
-            const userTokens = await prisma.firebaseToken.findMany();
-        
-            const payload = userTokens.map((t) => {
-                return { title: `Day Order Created by ${createdDayOrder.fitter?.name}`, body: `Day Order created on ${createdDayOrder.job.name} Job #${createdDayOrder.job.number}`,token: t.token }
-            });
-            console.log('sending notifications', payload)
-            await sendNotifications(payload);
-        }
+        if (createdDayOrder && createdByFitter) event.waitUntil(sendNotificationsToAllSubscribers(createdDayOrder));
     }
 
     return {
